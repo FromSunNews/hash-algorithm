@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {motion} from 'framer-motion'
 import './Item.css'
+import { useDispatch, useSelector } from 'react-redux'
+
 function Item({icon, name}) {
+    const navigateCurrent = useSelector(state => state.navigateCurrent)
+    const [nameNavigate, setNameNavigate] = useState(navigateCurrent)
+    console.log("🚀 ~ file: Item.js:8 ~ Item ~ navigateCurrent:", navigateCurrent)
+    const dispatch = useDispatch();
 
     const subheading ={
         true:{
@@ -12,14 +18,23 @@ function Item({icon, name}) {
             display: 'none'
         }
     }
+
+    useEffect(() => {
+        setNameNavigate(navigateCurrent)
+    }, [navigateCurrent])
   return (
-    <motion.div className='item'
+    <motion.div 
+    onClick={() => {
+        dispatch( {
+            type: 'updateNavigateCurrent',
+            value: name
+        })
+    }}
+    style={{
+        backgroundColor: name === nameNavigate ? "rgba(255, 255, 255, 0.3)" : null,
+    }}
+    className='item'
     whileHover = {{
-        backgroundColor: "rgba(255, 255, 255, 0.3)",
-        boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
-        backdropFilter: "blur(5.5px)",
-        WebkitBackdropFilter: "blur(5.5px)",
-        border: "1px solid rgba( 255, 255, 255, 0.18 )",
         cursor: 'pointer'
     }}
     transition={{
